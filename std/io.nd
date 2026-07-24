@@ -4,7 +4,9 @@ room println(value):
     var _ = _native.io_println(value)
 end;
 
-// io.print Includes line breaks but is an explicit alias
+// works with netdust runtime 1.1.6 or later.
+// room print() now works without a line break.
+// line breaks can be created using `\n`.
 room print(value):
     var _ = _native.io_print(value)
 end;
