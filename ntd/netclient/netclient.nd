@@ -1,0 +1,48 @@
+code start
+
+// works properly with NetDust Runtime 1.1.7 or later.
+// reuse existing _native. features
+
+var netclient_frame_count = 0
+var netclient_window_start = 0
+var netclient_fps_value = 0
+
+room local_time():
+    return _native.time_now()
+end;
+
+room local_time_ms():
+    return _native.time_ms()
+end;
+
+room local_time_string():
+    var t = _native.time_now()
+    return _native.time_format(t)
+end;
+
+// fps
+room tick():
+    netclient_frame_count = netclient_frame_count + 1
+
+    if (netclient_window_start == 0):
+        netclient_window_start = _native.time_ms()
+    end;
+
+    var elapsed = _native.time_ms() - netclient_window_start
+
+    if (elapsed >= 1000):
+        netclient_fps_value = netclient_frame_count
+        netclient_frame_count = 0
+        netclient_window_start = _native.time_ms()
+    end;
+end;
+
+room fps():
+    return netclient_fps_value
+end;
+
+room fps_reset():
+    netclient_frame_count = 0
+    netclient_window_start = 0
+    netclient_fps_value = 0
+end;
