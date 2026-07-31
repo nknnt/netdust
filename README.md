@@ -10,10 +10,7 @@ A clean, expressive language built for clarity — from entry point to blueprint
 | :--- | :---: | :--- |
 | **Net Dust Runtime (ndr)** | macOS / Cross platform | C++/Objective-C |
 | **Noctura** | Windows Only | C# .NET |
-| **Noc** | Linux Only | C++ |
-| **TIT4N** | Cross platform | Noctura |
-| **shimmer** | Windows Only | Noctura |
-| **Endear** | Windows Only | shimmer |
 
 > [!WARNING]
-> The TIT4N(netdust 2.3), Noc, shimmer, Endear is no longer being updated.
+>
+> **NetDust is currently under active development, so its syntax may change and some features may not work as expected.**
