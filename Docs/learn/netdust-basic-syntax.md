@@ -91,6 +91,46 @@ end;
 
 ---
 
+## While Loops
+
+Use `while` to repeat a block while a condition is true:
+
+```netdust
+room main():
+    num count = 0
+
+    while (true):
+        call std.io.println(count)
+        count = count + 1
+
+        if (count == 5):
+            break;
+        end;
+    end;
+end;
+```
+
+---
+
+## For Loops
+
+Use `for` to iterate over a sequence or range:
+
+```netdust
+room main():
+    num i
+    for (i = 0, i < 5, i = i + 1):
+        call std.io.println(i)
+    end;
+    // or
+    for (i in 0..5):
+        // code
+    end;
+end;
+```
+
+---
+
 ## Next Steps
 
 You now know the basics of netdust syntax. Head over to [Learning Resources](/Docs/learn/learning-resources.md) for more tutorials.
