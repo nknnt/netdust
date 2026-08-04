@@ -1,5 +1,5 @@
 # NetDust
-A clean, expressive language built for clarity — from entry point to blueprint.
+A clean, expressive language built for clarity — from entry point to architecture.
 
 ## Official Libraries
  + std/: The official standard library. It is stable with no major or breaking changes.
@@ -9,7 +9,7 @@ A clean, expressive language built for clarity — from entry point to blueprint
 | Engine | Platform | Based |
 | :--- | :---: | :--- |
 | **Net Dust Runtime (ndr)** | macOS / Cross platform | C++/Objective-C |
-| **Noctura** | Windows Only | C# .NET |
+| **Noctura** | Windows | C# .NET |
 
 > [!WARNING]
 >
