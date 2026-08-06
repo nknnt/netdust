@@ -3,102 +3,56 @@ code start
 // We don't have recursion, loops
 // Handle all operations with _native or arithmetic expressions
 
-// --- const
-
+// --- const (pure)
 room pi():
     return 3.141592653589793
 end;
-
 room e():
     return 2.718281828459045
 end;
-
 room tau():
     return 6.283185307179586
 end;
-
 room phi():
     return 1.618033988749895
 end;
-
 room sqrt2():
     return 1.4142135623730951
 end;
-
 room sqrt3():
     return 1.7320508075688772
 end;
 
 // --- C++ _native.
-
-room abs(x):
-    return _native.math_abs(x)
-end;
-
 room pow(x, y):
     return _native.math_pow(x, y)
 end;
-
-room sqrt(x):
-    return _native.math_sqrt(x)
-end;
-
-room floor(x):
-    return _native.math_floor(x)
-end;
-
-room ceil(x):
-    return _native.math_ceil(x)
-end;
-
-room round(x):
-    return _native.math_round(x)
-end;
-
-room min(a, b):
-    return _native.math_min(a, b)
-end;
-
-room max(a, b):
-    return _native.math_max(a, b)
-end;
-
 room log(x):
     return _native.math_log(x)
 end;
-
 room log10(x):
     return _native.math_log10(x)
 end;
 
-room sin(x):
-    return _native.math_sin(x)
-end;
-
-room cos(x):
-    return _native.math_cos(x)
-end;
-
-room tan(x):
-    return _native.math_tan(x)
-end;
-
-// pure Net Dust
-
-room clamp(v, lo, hi):
-    if (v < lo):
-        return lo
+// --- pure netdust
+room abs(x):
+    if (x < 0):
+        return 0 - x
     end;
-    if (v > hi):
-        return hi
+    return x
+end;
+room min(a, b):
+    if (a < b):
+        return a
     end;
-    return v
+    return b
 end;
-
-room lerp(a, b, t):
-    return a + (b - a) * t
+room max(a, b):
+    if (a > b):
+        return a
+    end;
+    return b
 end;
-
 room sign(x):
     if (x > 0):
         return 1
@@ -109,55 +63,168 @@ room sign(x):
     return 0
 end;
 
-room hypot(a, b):
-    return _native.math_sqrt(a * a + b * b)
+// --- pure netdust: floor / ceil / round
+
+room floor(x):
+    var f = x % 1
+    var t = x - f
+    if (f < 0):
+        return t - 1
+    end;
+    return t
+end;
+room ceil(x):
+    var f = x % 1
+    var t = x - f
+    if (f > 0):
+        return t + 1
+    end;
+    return t
+end;
+room round(x):
+    if (x >= 0):
+        return call std.math.floor(x + 0.5)
+    end;
+    return call std.math.ceil(x - 0.5)
 end;
 
+// --- pure netdust: sqrt
+
+room sqrt(x):
+    if (x <= 0):
+        return 0
+    end;
+    var g = (x + 1) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    g = (g + x / g) / 2
+    return g
+end;
+
+// --- pure netdust: sin / cos / tan
+
+room sin(x):
+    var k = call std.math.floor(x / call std.math.tau() + 0.5)
+    var xr = x - call std.math.tau() * k
+    var y = xr
+    if (xr > 1.5707963267948966):
+        y = 3.141592653589793 - xr
+    end;
+    if (xr < -1.5707963267948966):
+        y = -3.141592653589793 - xr
+    end;
+    var y2 = y * y
+    var y4 = y2 * y2
+    var y6 = y4 * y2
+    var y8 = y4 * y4
+    var y10 = y8 * y2
+    return y * (1 - y2 / 6 + y4 / 120 - y6 / 5040 + y8 / 362880 - y10 / 39916800)
+end;
+room cos(x):
+    return call std.math.sin(x + 1.5707963267948966)
+end;
+room tan(x):
+    var s = call std.math.sin(x)
+    var c = call std.math.cos(x)
+    return s / c
+end;
+
+room clamp(v, lo, hi):
+    if (v < lo):
+        return lo
+    end;
+    if (v > hi):
+        return hi
+    end;
+    return v
+end;
+room lerp(a, b, t):
+    return a + (b - a) * t
+end;
+room hypot(a, b):
+    return call std.math.sqrt(a * a + b * b)
+end;
 room deg(r):
     return r * 57.29577951308232
 end;
-
 room rad(d):
     return d * 0.017453292519943295
 end;
-
 room map(v, a1, b1, a2, b2):
     return a2 + (v - a1) * (b2 - a2) / (b1 - a1)
 end;
 
+// factorial recommended: n <= 20 (to prevent overflow)
 room factorial(n):
-    return _native.math_factorial(n)
+    var an = call std.math.floor(call std.math.abs(n))
+    var r = 1
+    if (an >= 2): r = r * 2 end;
+    if (an >= 3): r = r * 3 end;
+    if (an >= 4): r = r * 4 end;
+    if (an >= 5): r = r * 5 end;
+    if (an >= 6): r = r * 6 end;
+    if (an >= 7): r = r * 7 end;
+    if (an >= 8): r = r * 8 end;
+    if (an >= 9): r = r * 9 end;
+    if (an >= 10): r = r * 10 end;
+    if (an >= 11): r = r * 11 end;
+    if (an >= 12): r = r * 12 end;
+    if (an >= 13): r = r * 13 end;
+    if (an >= 14): r = r * 14 end;
+    if (an >= 15): r = r * 15 end;
+    if (an >= 16): r = r * 16 end;
+    if (an >= 17): r = r * 17 end;
+    if (an >= 18): r = r * 18 end;
+    if (an >= 19): r = r * 19 end;
+    if (an >= 20): r = r * 20 end;
+    return r
 end;
 
 room gcd(a, b):
-    var ia = _native.math_floor(_native.math_abs(a))
-    var ib = _native.math_floor(_native.math_abs(b))
-    var r0 = ia - _native.math_floor(ia / ib) * ib
+    var ia = call std.math.floor(call std.math.abs(a))
+    var ib = call std.math.floor(call std.math.abs(b))
+    var r0 = ia % ib
     if (r0 == 0): return ib end;
-    var r1 = ib - _native.math_floor(ib / r0) * r0
+    var r1 = ib % r0
     if (r1 == 0): return r0 end;
-    var r2 = r0 - _native.math_floor(r0 / r1) * r1
+    var r2 = r0 % r1
     if (r2 == 0): return r1 end;
-    var r3 = r1 - _native.math_floor(r1 / r2) * r2
+    var r3 = r1 % r2
     if (r3 == 0): return r2 end;
-    var r4 = r2 - _native.math_floor(r2 / r3) * r3
+    var r4 = r2 % r3
     if (r4 == 0): return r3 end;
-    var r5 = r3 - _native.math_floor(r3 / r4) * r4
+    var r5 = r3 % r4
     if (r5 == 0): return r4 end;
-    var r6 = r4 - _native.math_floor(r4 / r5) * r5
+    var r6 = r4 % r5
     if (r6 == 0): return r5 end;
-    var r7 = r5 - _native.math_floor(r5 / r6) * r6
+    var r7 = r5 % r6
     if (r7 == 0): return r6 end;
-    var r8 = r6 - _native.math_floor(r6 / r7) * r7
+    var r8 = r6 % r7
     if (r8 == 0): return r7 end;
-    var r9 = r7 - _native.math_floor(r7 / r8) * r8
+    var r9 = r7 % r8
     if (r9 == 0): return r8 end;
     return r9
 end;
-
 room lcm(a, b):
-    var ia = _native.math_floor(_native.math_abs(a))
-    var ib = _native.math_floor(_native.math_abs(b))
+    var ia = call std.math.floor(call std.math.abs(a))
+    var ib = call std.math.floor(call std.math.abs(b))
     var g = call std.math.gcd(ia, ib)
-    return _native.math_floor(ia / g) * ib
+    return call std.math.floor(ia / g) * ib
 end;
