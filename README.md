@@ -10,10 +10,10 @@ from entry point to architecture.<br>
 ## Community Libraries
 + lib/: An assortment of third party libraries developed and distributed directly by users.
 
-## Official Net Dust Engines
+## Official NetDust Engines
 | Engine | Platform | Based |
 | :--- | :---: | :--- |
-| **Net Dust Runtime (ndr)** | macOS / Cross platform | C++/Objective-C |
+| **NetDust Runtime (ndr)** | macOS / Cross platform | C++/Objective-C |
 | **Noctura - Solstice** | Windows | embeds ndr engine via C++/CLI |
 | **Noctura - Aurora (Legacy)** | Windows | C# .NET |
 
