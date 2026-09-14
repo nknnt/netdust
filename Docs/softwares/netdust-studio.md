@@ -1,4 +1,4 @@
-# NetDust Studio
+# NetDust Studio - kiyo
 
 NetDust Studio is a C# based project editor for **NetDust**, inspired by the workflow and user experience of Visual Studio.
 
