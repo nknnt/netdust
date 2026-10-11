@@ -1,5 +1,9 @@
 # ESP32 Setup Guide
 
+> [!CAUTION]
+> **Official NetDust support for ESP32 has been discontinued.**<br>
+> Future updates and active bug fixes will no longer be provided for ESP32 devices.
+
 Building from source is not required for ESP32. You can simply flash the pre compiled firmware binary.
 
 ## Installation Methods
