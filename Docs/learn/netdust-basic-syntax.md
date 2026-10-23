@@ -78,13 +78,13 @@ room main():
     num score = 7
 
     if (score > 5):
-        call io.println("passed")
+        call std.io.println("passed")
     end;
     else if (score == 5):
-        call io.println("borderline")
+        call std.io.println("borderline")
     end;
     else:
-        call io.println("failed")
+        call std.io.println("failed")
     end;
 end;
 ```
