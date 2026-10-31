@@ -1,0 +1,62 @@
+code start
+
+// libcurl based HTTP client library
+// version 2.0.0: request headers are set with set_header(name, value)
+// before each request. The old "Key: Value\nKey2: Value2" headers string argument
+// was removed (header injection). Requires ndr 1.4.6 or later.
+
+room set_header(name, value):
+    return _native.http_set_header(name, value)
+end;
+
+room clear_headers():
+    return _native.http_clear_headers()
+end;
+
+room get(url):
+    return _native.http_get(url)
+end;
+
+room post(url, body):
+    return _native.http_post(url, body)
+end;
+
+room put(url, body):
+    return _native.http_put(url, body)
+end;
+
+room patch(url, body):
+    return _native.http_patch(url, body)
+end;
+
+room delete(url):
+    return _native.http_delete(url)
+end;
+
+room request(method, url, body):
+    return _native.http_request(method, url, body)
+end;
+
+room download(url, path):
+    return _native.http_download(url, path)
+end;
+
+room status():
+    return _native.http_status()
+end;
+
+room header(name):
+    return _native.http_header(name)
+end;
+
+room headers():
+    return _native.http_headers()
+end;
+
+room error():
+    return _native.http_error()
+end;
+
+room encode(text):
+    return _native.http_encode(text)
+end;
