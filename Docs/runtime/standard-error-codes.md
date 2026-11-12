@@ -29,7 +29,8 @@ e.g., 0x9SYS0001
 | `PKG` | Package | Package management (paxon, etc. — reserved) |
 | `CFG` | Configuration | Config files (`.ndproject`, etc. — reserved) |
 | `NET` | Network | Network connectivity (reserved) |
-| `SEC` | Security | Security violations (reserved) |
+| `WRN` | Warning | Non-fatal diagnostics; the script continues |
+| `SEC` | Security | Sandbox, read-only filesystem, and HTTP header policy violations |
 
 ---
 
@@ -46,6 +47,12 @@ e.g., 0x9SYS0001
 | `0x5SYN0007` | Executable statement is not allowed in global scope |
 | `0x5SYN0008` | String literal missing double quotes or undefined identifier |
 | `0x5SYN0009` | Invalid range syntax/content |
+| `0x5SYN0010` | Block starting at line N is not closed with 'end;'. |
+| `0x5SYN0011` | 'break' must end with ';'. / 'continue' must end with ';'. |
+| `0x5SYN0012` | 'call' is missing a closing ')'. |
+| `0x5SYN0013` | Invalid arithmetic expression (missing ')', unexpected token, unexpected end of expression, expression nested too deeply, ...): '...'. / Incomplete expression, missing operand: '...'. / Room 'X' must be called with 'call': write 'call X(...)'. |
+| `0x5SYN0014` | 'const slot' is not supported yet — declare with 'slot' only (without 'const'). |
+| `0x5SYN0015` | 'slot a' must be initialized with a bracket literal, e.g. 'slot a = [1, 2, 3];' |
 
 ## RUN — Runtime
 
@@ -60,6 +67,9 @@ e.g., 0x9SYS0001
 | `0x5RUN0007` | Blueprint is not defined |
 | `0x5RUN0008` | 'main' cannot be called directly |
 | `0x7RUN0009` | Entry point 'room main():' is missing |
+| `0x5RUN0010` | Maximum call depth (10000) exceeded in room 'X'. Possible infinite recursion. / Maximum nested call depth in expressions (1500) exceeded in room 'X'. Possible infinite recursion. |
+| `0x5RUN0011` | Cannot do arithmetic on a non-numeric operand 'c' (value 'abc'): 'c * 2'. / Division by zero: '10 / z'. / Division by zero: '10 % z' (modulo). / Cannot do arithmetic, number out of range 'a': 'a * a'. |
+| `0x5RUN0012` | Room 'X' expects N argument(s), but M given. |
 
 ## MOD — Module
 
@@ -98,6 +108,27 @@ e.g., 0x9SYS0001
 |---|---|
 | `0x9SYS0001` | Data corruption detected |
 
+## WRN — Warning
+
+Non-fatal. ndr prints these as `warning[code]:` and the script still finishes successfully.
+
+| Code | Message |
+|---|---|
+| `0x3WRN0001` | cannot convert 'abc' to a number for numeric variable 'n' — defaulting to 0. |
+| `0x3WRN0002` | array declared without `var` |
+| `0x3WRN0003` | variable 'flag' declared without 'bool' — prefer 'bool flag = true;' |
+| `0x3WRN0004` | 'slot[...]' literal is deprecated — write 'slot a = [1, 2, 3];' / 'var a = slot[...]' is deprecated — write 'slot a = [1, 2, 3];' / array 'a' declared with legacy 'slot[...]' literal — prefer 'slot a = [1, 2, 3];' |
+
+## SEC — Security
+
+These always stop the run (including when `runtime.stopOnFirstError` is disabled). The diagnostic label is `security policy violation`.
+
+| Code | Message |
+|---|---|
+| `0x5SEC0001` | _native.fs_write: refused: write blocked by the read-only filesystem policy / _native.fs_read: refused: path is not inside the sandbox root: '...' / _native.http_set_header: refused: header value has a disallowed control character: '...' / _native.http_set_header: refused: this header is reserved: '...' |
+
 ---
 
 Error codes may be added, removed, or changed in future releases.
+
+Last checked against ndr 1.4.8 (Linux).
